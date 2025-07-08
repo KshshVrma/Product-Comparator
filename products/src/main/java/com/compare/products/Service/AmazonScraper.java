@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AmazonScraper {
 
-    public static void mained(String[] args) {
+    public static void main(String[] args) {
         String query = "oneplus nord";  // change search term as needed
         String searchUrl = "https://www.amazon.in/s?k=" + query.replace(" ", "+");
 
