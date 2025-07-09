@@ -1,16 +1,23 @@
 package com.compare.products.Service;
+import com.compare.products.Product;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class AmazonScraper {
+    Product product;
+    @Autowired
+    public AmazonScraper(Product product) {
+        this.product = product;
+    }
 
-    public static void main(String[] args) {
-        String query = "oneplus nord";  // change search term as needed
+    public Product scrape(String query) {
+
         String searchUrl = "https://www.amazon.in/s?k=" + query.replace(" ", "+");
 
         try {
@@ -30,18 +37,23 @@ public class AmazonScraper {
                 String link = product.select("h2 a").attr("href");
 
                 if (!title.isEmpty() && !price.isEmpty()) {
-                    System.out.println((count + 1) + ". " + title);
-                    System.out.println("   Price: " + price);
-                    System.out.println("   Link: https://www.amazon.in" + link + "\n");
+                    this.product.setName((count + 1) + ". " + title);
+                    this.product.setPrice("   Price: " + price);
+                    this.product.setLink("   Link: https://www.amazon.in" + link);
+
+//                    System.out.println((count + 1) + ". " + title);
+//                    System.out.println("   Price: " + price);
+//                    System.out.println("   Link: https://www.amazon.in" + link + "\n");
 
                     count++;
                 }
 
-                if (count >= 3) break;
+                if (count >= 1) break;
             }
 
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }
+        return product;
     }
 }

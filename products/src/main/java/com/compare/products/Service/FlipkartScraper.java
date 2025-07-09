@@ -1,5 +1,6 @@
 package com.compare.products.Service;
 
+import com.compare.products.Product;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -7,13 +8,20 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FlipkartScraper {
 
-    public static void main(String[] args) {
-        String query = "oneplus nord";
+    Product product;
+    @Autowired
+    public FlipkartScraper(Product product) {
+        this.product = product;
+    }
+
+    public Product scrape(String query) {
+//        String query = "motorola edge 60";
         String searchUrl = "https://www.flipkart.com/search?q=" + query.replace(" ", "+");
 
         try {
@@ -45,25 +53,30 @@ public class FlipkartScraper {
                 String link = "https://www.flipkart.com" + card.attr("href");
 
                 if (!title.isEmpty() && !price.isEmpty()) {
-                    System.out.println((count + 1) + ". " + title);
-                    System.out.println("   Price: " + price);
-                    System.out.println("   Link: " + link + "\n");
+
+                    product.setName((count + 1) + ". " + title);
+                    product.setLink("   Link: " + link );
+                    product.setPrice("   Price: " + price);
+//                    System.out.println((count + 1) + ". " + title);
+//                    System.out.println("   Price: " + price);
+//                    System.out.println("   Link: " + link + "\n");
                     count++;
                 }
 
-                if (count >= 3) break;
+                if (count >= 1) break;
             }
 
 
             driver.quit();
 
             if (count == 0) {
-                System.out.println("No products found. Check selectors or wait time.");
-                System.out.println(html);
+                System.out.println("No flipkart products found. Check selectors or wait time.");
+
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return product;
     }
 }
