@@ -21,6 +21,7 @@ public class GeminiService {
         List<Map<String, String>> parts = List.of(Map.of("text", promptText));
         requestBody.put("contents", List.of(Map.of("parts", parts)));
 
+
         // Create headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

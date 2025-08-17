@@ -60,6 +60,8 @@ FlipkartScraper flipkartScraper;
     response.append("\n");
     response.append(flipkart.getLink());
 
-    return amazon.getName()+amazon.getPrice()+" vs "+flipkart.getName()+flipkart.getPrice()+"\n"+geminiService.generateContent(response.toString());
+    String res= amazon.getName()+amazon.getPrice()+" vs "+flipkart.getName()+flipkart.getPrice()+"\n"+geminiService.generateContent(response.toString());
+    System.out.println(res);
+    return res;
 }
 }
