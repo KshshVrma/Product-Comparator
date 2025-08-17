@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Response</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+        }
+        .response-container {
+            white-space: pre-wrap; /* Preserve line breaks and spacing */
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            color: #555;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h1>Gemini Response</h1>
+<div id="response" class="response-container">Loading...</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('query');
+
+    if (query) {
+        fetch(`/gemini?product=${encodeURIComponent(query)}`)
+            .then(response => response.text())
+            .then(data => {
+                const responseDiv = document.getElementById('response');
+                responseDiv.textContent = data; // Display the entire response as plain text
+            })
+            .catch(error => {
+                document.getElementById('response').textContent = 'Error fetching response.';
+                console.error(error);
+            });
+    } else {
+        document.getElementById('response').textContent = 'No query provided.';
+    }
+</script>
+</body>
+</html>
